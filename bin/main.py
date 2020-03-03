@@ -33,8 +33,8 @@ Requirements
 
 #=========================== to be modified ===================================
 
-BUTTON_NAME = 'BMW'
-BUTTON_GROUP_NAME = 'schutzKlasse'
+BUTTON_NAME = 'schutzKlasse'
+BUTTON_GROUP_NAME = 'BMW'
 DOCUMENTATON_GROUP = 'ANSA tools'
 DOCUMENTATON_DESCRIPTION = 'ANSA button for Schutz Klasse sets/include definition.'
 
