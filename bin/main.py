@@ -192,6 +192,8 @@ class SchutzKlasseSetsCreator(object):
 			 if setItem.setEntity is not None:
 				 setEntities.append(setItem.setEntity)
 				 setDefinitions['*ELSET, ELSET=%s' % setItem.getName(False).strip()] = setItem
+				 # different ANSA output setup..
+				 setDefinitions['*ELSET, ELSET=S%s' % setItem.getName().strip()] = setItem
 			 
 		# identify include
 		self.createInclude()
@@ -213,11 +215,19 @@ class SchutzKlasseSetsCreator(object):
 			currentSetItem = None
 			for line in lines:
 				if line.startswith('*'):
-					if line.strip() in setDefinitions.keys():
-						currentSetItem = setDefinitions[line.strip()]
+					# identify set - exported name can be cut off et the end!!!
+					currentSetItem = None
+					for setName in setDefinitions.keys():
+						if setName.startswith(line.strip()):
+							currentSetItem = setDefinitions[setName]
+							break
+					if currentSetItem is not None:
 						continue
-					else:
-						currentSetItem = None
+#					if line.strip() in setDefinitions.keys():
+#						currentSetItem = setDefinitions[line.strip()]
+#						continue
+#					else:
+#						currentSetItem = None
 					
 				if currentSetItem is not None:
 					currentSetItem.addContentLine(line)
@@ -300,28 +310,34 @@ class SchutzKlasseSetsCreator(object):
 		f.write(util.DEFINITION_STRING_PARAMETERS)
 		f.write(util.DEFINITION_STRING_SURFACE)
 		
-		for setItem in self.setItems:
+		for setItem in self._getSortedSetItems():
 			 f.write(setItem.getSurfaceDefinition())
 			 		
 		f.write(util.DEFINITION_STRING_SET)
 		
-		for setItem in self.setItems:
+		for setItem in self._getSortedSetItems():
 			 f.write(setItem.getSetDefinition())
 				
 		f.write(util.DEFINITION_STRING_STEP)
 		f.write(util.DEFINITION_STRING_STEP_TYPE)
 		f.write(util.DEFINITION_STRING_STEP_OUTPUT_FILED)
 				
-		for setItem in self.setItems:
+		for setItem in self._getSortedSetItems():
 			 f.write(setItem.getOutputForceDefinition())
 		
 		f.write(util.DEFINITION_STRING_STEP_OUTPUT_HISTORY)
 		
-		for setItem in self.setItems:
+		for setItem in self._getSortedSetItems():
 			 f.write(setItem.getOutputEnergyDefinition())
 		
 		f.write("*END STEP")
-		f.close()  
+		f.close() 
+	
+	#--------------------------------------------------------------------------
+
+	def _getSortedSetItems(self):
+		
+		return sorted(self.setItems, key=lambda setItem: setItem.id)
 
 # ==============================================================================
 
