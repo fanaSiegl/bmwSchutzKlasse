@@ -40,7 +40,7 @@ DOCUMENTATON_DESCRIPTION = 'ANSA button for Schutz Klasse sets/include definitio
 
 #==============================================================================
 
-DEBUG = 0
+DEBUG = 1
 
 #==============================================================================
 
@@ -117,7 +117,7 @@ class SetDefinition(object):
 CFN
 CFNM,
 *ENERGY OUTPUT, ELSET=S%s
-"ALLIE,
+ALLIE,
 ''' % (self.getName(), self.getName())
 	
 	#--------------------------------------------------------------------------
